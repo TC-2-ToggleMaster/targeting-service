@@ -6,7 +6,7 @@ Este é o serviço de regras de segmentação (targeting) do projeto ToggleMaste
 
 ## 📦 Pré-requisitos (Local)
 
-* [Python](https://www.python.org/) (versão 3.9 ou superior)
+* [Python](https://www.python.org/) (versão 3.10 ou superior)
 * [PostgreSQL](https://www.postgresql.org/download/)
 * O `auth-service` deve estar rodando.
 
@@ -35,19 +35,24 @@ Este é o serviço de regras de segmentação (targeting) do projeto ToggleMaste
     ```
 
 4.  **Instale as Dependências:**
+    No Windows, use o inicializador `py` para executar o pip:
     ```bash
-    pip install -r requirements.txt
+    py -m pip install -r requirements.txt
     ```
 
 5.  **Inicie o Serviço:**
+    No Windows, inicie com o servidor integrado do Flask:
+    ```bash
+    py app.py
+    ```
+    O servidor estará rodando em `http://localhost:8003`. Em Linux/WSL, você também pode iniciar com Gunicorn:
     ```bash
     gunicorn --bind 0.0.0.0:8003 app:app
     ```
-    O servidor estará rodando em `http://localhost:8003`.
 
 ## 🧪 Testando os Endpoints
 
-Lembre-se de obter sua `SUA_CHAVE_API` no `auth-service` (veja o README do `flag-service`).
+Lembre-se de obter sua `$SUA_CHAVE_API` no `auth-service` (veja o README do `flag-service`).
 
 **1. Verifique a Saúde (Health Check):**
 ```bash
@@ -59,7 +64,7 @@ Saída esperada: `{"status":"ok"}`
 ```bash
 curl -X POST http://localhost:8003/rules \
 -H "Content-Type: application/json" \
--H "Authorization: Bearer SUA_CHAVE_API" \
+-H "Authorization: Bearer $SUA_CHAVE_API" \
 -d '{
     "flag_name": "enable-new-dashboard",
     "is_enabled": true,
@@ -74,7 +79,7 @@ Saída esperada: (Um JSON com os dados da regra criada).
 **3. Busque a Regra que você criou:**
 ```bash
 curl http://localhost:8003/rules/enable-new-dashboard \
--H "Authorization: Bearer SUA_CHAVE_API"
+-H "Authorization: Bearer $SUA_CHAVE_API"
 ```
 Saída esperada: (O JSON da regra que você acabou de criar).
 
@@ -82,7 +87,7 @@ Saída esperada: (O JSON da regra que você acabou de criar).
 ```bash
 curl -X PUT http://localhost:8003/rules/enable-new-dashboard \
 -H "Content-Type: application/json" \
--H "Authorization: Bearer SUA_CHAVE_API" \
+-H "Authorization: Bearer $SUA_CHAVE_API" \
 -d '{
     "rules": {
         "type": "PERCENTAGE",
